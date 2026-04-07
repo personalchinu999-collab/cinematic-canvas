@@ -21,27 +21,16 @@ const AboutSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".about-img", {
-        opacity: 0,
-        x: -60,
-        duration: 0.8,
-        ease: "power3.out",
+      gsap.fromTo(".about-img", { opacity: 0, x: -60 }, {
+        opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
         scrollTrigger: { trigger: ".about-img", start: "top 80%" },
       });
-      gsap.from(".about-text", {
-        opacity: 0,
-        x: 60,
-        duration: 0.8,
-        ease: "power3.out",
+      gsap.fromTo(".about-text", { opacity: 0, x: 60 }, {
+        opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
         scrollTrigger: { trigger: ".about-text", start: "top 80%" },
       });
-      gsap.from(".skill-icon", {
-        opacity: 0,
-        y: 30,
-        scale: 0.8,
-        stagger: 0.15,
-        duration: 0.5,
-        ease: "back.out(1.4)",
+      gsap.fromTo(".skill-icon", { opacity: 0, y: 30, scale: 0.8 }, {
+        opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.5, ease: "back.out(1.4)",
         scrollTrigger: { trigger: ".skill-icons-row", start: "top 85%" },
       });
     }, sectionRef);
