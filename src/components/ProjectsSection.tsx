@@ -14,19 +14,19 @@ const projects = [
     link: "https://drive.google.com/drive/folders/130dfvk7Fr294rvxyJG1GxVhVEuXBzGiS?usp=drive_link",
   },
   {
-    title: "After Effects Compositing",
+    title: "Motion Graphics",
     desc: "Complex VFX compositing and motion tracking projects in After Effects.",
     img: project2,
     link: "https://drive.google.com/drive/folders/1W1yjN3TrpRJkmLr1dlvhlZqXAnH6o91d?usp=drive_link",
   },
   {
-    title: "Motion Graphics Reel",
+    title: "Ads",
     desc: "Dynamic motion graphics, transitions, and animated visual designs.",
     img: project3,
     link: "https://drive.google.com/drive/folders/1yHANLysb_yKWDdXN9eh1BvtTU4uFqFrL?usp=drive_link",
   },
   {
-    title: "Professional Editing Suite",
+    title: "Logo Animation",
     desc: "Multi-monitor professional editing workflows and color grading.",
     img: project4,
     link: "https://drive.google.com/drive/folders/1LXBP2zKrRz1T3kacsGcLm88N6KEnazIK?usp=drive_link",
