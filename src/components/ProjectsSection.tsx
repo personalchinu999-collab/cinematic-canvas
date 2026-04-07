@@ -7,7 +7,7 @@ import project4 from "@/assets/project-4.jpg";
 
 const projects = [
   {
-    title: "Cinematic Showreel",
+    title: "Video Editing",
     desc: "A compilation of cinematic edits showcasing premium visual storytelling.",
     img: project1,
     link: "https://drive.google.com/drive/folders/130dfvk7Fr294rvxyJG1GxVhVEuXBzGiS?usp=drive_link",
