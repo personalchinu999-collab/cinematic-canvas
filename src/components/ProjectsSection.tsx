@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ExternalLink } from "lucide-react";
+import { useMouseParallax } from "@/hooks/useMouseParallax";
 import project1 from "@/assets/project-1.png";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -35,7 +36,6 @@ const projects = [
 const useInView = (threshold = 0.1) => {
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -46,7 +46,6 @@ const useInView = (threshold = 0.1) => {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-
   return { ref, inView };
 };
 
@@ -55,8 +54,8 @@ const ProjectsSection = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section ref={sectionRef} id="projects" className="section-padding">
-      <div className="max-w-6xl mx-auto">
+    <section ref={sectionRef} id="projects" className="section-padding relative">
+      <div className="max-w-6xl mx-auto relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
           My <span className="text-gradient">Projects</span>
         </h2>
@@ -82,7 +81,7 @@ const ProjectsSection = () => {
         <div
           ref={scrollContainerRef}
           className="projects-grid md:hidden flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 scrollbar-hide"
-          style={{ scrollbarWidth: "none" }}
+          style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
         >
           {projects.map((p, i) => (
             <div
@@ -103,29 +102,73 @@ const ProjectsSection = () => {
   );
 };
 
-const ProjectCard = ({ title, desc, img, link }: typeof projects[0]) => (
-  <div className="project-card glass-card glow-border rounded-2xl overflow-hidden group transition-all duration-500 hover:-translate-y-2">
-    <div className="relative h-48 md:h-56 overflow-hidden">
-      <img
-        src={img}
-        alt={title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+const ProjectCard = ({ title, desc, img, link }: typeof projects[0]) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${y * -6}deg) translateY(-8px)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)";
+  }, []);
+
+  const handleClick = useCallback(() => {
+    window.open(link, "_blank", "noopener,noreferrer");
+  }, [link]);
+
+  return (
+    <div
+      ref={cardRef}
+      className="project-card glass-card rounded-2xl overflow-hidden group cursor-pointer"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+        border: "1px solid hsla(220, 80%, 60%, 0.2)",
+        willChange: "transform",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "hsla(220, 80%, 60%, 0.5)";
+        e.currentTarget.style.boxShadow = "0 20px 60px hsla(220, 80%, 60%, 0.15), 0 0 30px hsla(260, 60%, 55%, 0.1)";
+      }}
+      onMouseLeaveCapture={(e) => {
+        e.currentTarget.style.borderColor = "hsla(220, 80%, 60%, 0.2)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      <div className="relative h-48 md:h-56 overflow-hidden">
+        <img
+          src={img}
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+      </div>
+      <div className="p-6">
+        <h3 className="text-lg font-semibold mb-2 text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{desc}</p>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="inline-flex items-center gap-2 btn-glow px-5 py-2.5 rounded-xl text-primary-foreground text-sm font-medium transition-all duration-300 hover:scale-105"
+        >
+          View Project <ExternalLink size={14} />
+        </a>
+      </div>
     </div>
-    <div className="p-6">
-      <h3 className="text-lg font-semibold mb-2 text-foreground">{title}</h3>
-      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{desc}</p>
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 btn-glow px-5 py-2 rounded-lg text-primary-foreground text-sm font-medium"
-      >
-        View Project <ExternalLink size={14} />
-      </a>
-    </div>
-  </div>
-);
+  );
+};
 
 export default ProjectsSection;

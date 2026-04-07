@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useMouseParallax } from "@/hooks/useMouseParallax";
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const mouse = useMouseParallax(0.03);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -22,12 +24,24 @@ const HeroSection = () => {
       id="hero"
       className="relative min-h-screen flex items-center justify-center section-padding overflow-hidden"
     >
-      {/* Floating lights */}
-      <div className="floating-light w-[500px] h-[500px] bg-primary/20 -top-40 left-1/4 animate-float" />
-      <div className="floating-light w-[400px] h-[400px] bg-secondary/15 bottom-20 right-10 animate-float" style={{ animationDelay: "3s" }} />
-      <div className="floating-light w-[200px] h-[200px] bg-primary/10 top-1/2 left-10 animate-pulse-glow" />
+      {/* Floating lights with parallax */}
+      <div
+        className="floating-light w-[500px] h-[500px] bg-primary/20 -top-40 left-1/4 animate-float"
+        style={{ transform: `translate(${mouse.x * 2}px, ${mouse.y * 2}px)` }}
+      />
+      <div
+        className="floating-light w-[400px] h-[400px] bg-secondary/15 bottom-20 right-10 animate-float"
+        style={{ animationDelay: "3s", transform: `translate(${mouse.x * -1.5}px, ${mouse.y * -1.5}px)` }}
+      />
+      <div
+        className="floating-light w-[200px] h-[200px] bg-primary/10 top-1/2 left-10 animate-pulse-glow"
+        style={{ transform: `translate(${mouse.x * 1}px, ${mouse.y * 1}px)` }}
+      />
 
-      <div className="relative z-10 text-center max-w-4xl mx-auto">
+      <div
+        className="relative z-10 text-center max-w-4xl mx-auto"
+        style={{ transform: `translate(${mouse.x * 0.5}px, ${mouse.y * 0.5}px)` }}
+      >
         <span className="hero-tag inline-block text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
           Video Editor & Motion Designer
         </span>
@@ -42,7 +56,7 @@ const HeroSection = () => {
         </p>
         <a
           href="#contact"
-          className="hero-btn inline-block btn-glow px-8 py-3.5 rounded-lg text-primary-foreground font-semibold text-sm tracking-wide"
+          className="hero-btn inline-block btn-glow px-8 py-3.5 rounded-xl text-primary-foreground font-semibold text-sm tracking-wide transition-all duration-300 hover:scale-105"
         >
           Hire Me
         </a>

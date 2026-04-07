@@ -7,6 +7,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import SocialButtons from "@/components/SocialButtons";
 import Footer from "@/components/Footer";
+import ParticlesBackground from "@/components/ParticlesBackground";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,7 @@ const Index = () => {
       <div
         className={`bg-glow transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}
       >
+        <ParticlesBackground />
         <Navbar />
         <HeroSection />
         <AboutSection />
