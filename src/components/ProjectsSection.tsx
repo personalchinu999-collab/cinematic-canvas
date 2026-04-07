@@ -42,25 +42,21 @@ const ProjectsSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>(".project-card");
-      if (cards.length === 0) return;
-      
-      gsap.set(cards, { opacity: 0, y: 50 });
-      
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-          gsap.to(cards, {
-            opacity: 1,
-            y: 0,
-            stagger: 0.15,
-            duration: 0.7,
-            ease: "power3.out",
-          });
-        },
-      });
+      gsap.fromTo(
+        ".project-card",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.15,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
