@@ -114,9 +114,11 @@ const ProjectCard = ({ title, desc, img, link }: typeof projects[0]) => {
     card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${y * -6}deg) translateY(-8px)`;
   }, []);
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const card = cardRef.current;
     if (!card) return;
+    card.style.borderColor = "hsla(220, 80%, 60%, 0.2)";
+    card.style.boxShadow = "none";
     card.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)";
   }, []);
 
@@ -139,10 +141,7 @@ const ProjectCard = ({ title, desc, img, link }: typeof projects[0]) => {
         e.currentTarget.style.borderColor = "hsla(220, 80%, 60%, 0.5)";
         e.currentTarget.style.boxShadow = "0 20px 60px hsla(220, 80%, 60%, 0.15), 0 0 30px hsla(260, 60%, 55%, 0.1)";
       }}
-      onMouseLeaveCapture={(e) => {
-        e.currentTarget.style.borderColor = "hsla(220, 80%, 60%, 0.2)";
-        e.currentTarget.style.boxShadow = "none";
-      }}
+    
     >
       <div className="relative h-48 md:h-56 overflow-hidden">
         <img
