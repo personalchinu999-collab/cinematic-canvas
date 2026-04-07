@@ -1,13 +1,9 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import project1 from "@/assets/project-1.png";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
 import project4 from "@/assets/project-4.jpg";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -36,24 +32,27 @@ const projects = [
   },
 ];
 
-const ProjectsSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+const useInView = (threshold = 0.1) => {
+  const ref = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".project-card", {
-        opacity: 0,
-        y: 50,
-        stagger: 0.15,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".projects-grid", start: "top 80%" },
-      });
-    }, sectionRef);
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
 
-    return () => ctx.revert();
-  }, []);
+  return { ref, inView };
+};
+
+const ProjectsSection = () => {
+  const { ref: sectionRef, inView } = useInView(0.05);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
     <section ref={sectionRef} id="projects" className="section-padding">
@@ -64,8 +63,18 @@ const ProjectsSection = () => {
 
         {/* Desktop grid */}
         <div className="projects-grid hidden md:grid md:grid-cols-2 gap-8">
-          {projects.map((p) => (
-            <ProjectCard key={p.title} {...p} />
+          {projects.map((p, i) => (
+            <div
+              key={p.title}
+              className="transition-all duration-700 ease-out"
+              style={{
+                opacity: inView ? 1 : 0,
+                transform: inView ? "translateY(0)" : "translateY(50px)",
+                transitionDelay: `${i * 150}ms`,
+              }}
+            >
+              <ProjectCard {...p} />
+            </div>
           ))}
         </div>
 
@@ -75,8 +84,16 @@ const ProjectsSection = () => {
           className="projects-grid md:hidden flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 scrollbar-hide"
           style={{ scrollbarWidth: "none" }}
         >
-          {projects.map((p) => (
-            <div key={p.title} className="snap-center shrink-0 w-[85vw]">
+          {projects.map((p, i) => (
+            <div
+              key={p.title}
+              className="snap-center shrink-0 w-[85vw] transition-all duration-700 ease-out"
+              style={{
+                opacity: inView ? 1 : 0,
+                transform: inView ? "translateY(0)" : "translateY(50px)",
+                transitionDelay: `${i * 150}ms`,
+              }}
+            >
               <ProjectCard {...p} />
             </div>
           ))}
