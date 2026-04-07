@@ -1,13 +1,9 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 import profileImg from "@/assets/profile.png";
 import capcutLogo from "@/assets/capcut_logo.jpg";
 import aeLogo from "@/assets/after_effect_logo.jpg";
 import prLogo from "@/assets/premiere_pro_logo.png";
 import psLogo from "@/assets/photoshop_logo.jpg";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
   { name: "Premiere Pro", icon: prLogo },
@@ -16,27 +12,26 @@ const skills = [
   { name: "CapCut", icon: capcutLogo },
 ];
 
-const AboutSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+const useInView = (threshold = 0.1) => {
+  const ref = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(".about-img", { opacity: 0, x: -60 }, {
-        opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: ".about-img", start: "top 80%" },
-      });
-      gsap.fromTo(".about-text", { opacity: 0, x: 60 }, {
-        opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: ".about-text", start: "top 80%" },
-      });
-      gsap.fromTo(".skill-icon", { opacity: 0, y: 30, scale: 0.8 }, {
-        opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.5, ease: "back.out(1.4)",
-        scrollTrigger: { trigger: ".skill-icons-row", start: "top 85%" },
-      });
-    }, sectionRef);
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
 
-    return () => ctx.revert();
-  }, []);
+  return { ref, inView };
+};
+
+const AboutSection = () => {
+  const { ref: sectionRef, inView } = useInView(0.05);
 
   return (
     <section ref={sectionRef} id="about" className="section-padding">
@@ -46,7 +41,13 @@ const AboutSection = () => {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-          <div className="about-img flex justify-center">
+          <div
+            className="about-img flex justify-center transition-all duration-800 ease-out"
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateX(0)" : "translateX(-60px)",
+            }}
+          >
             <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden glow-border">
               <img
                 src={profileImg}
@@ -56,7 +57,14 @@ const AboutSection = () => {
             </div>
           </div>
 
-          <div className="about-text">
+          <div
+            className="about-text transition-all duration-800 ease-out"
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateX(0)" : "translateX(60px)",
+              transitionDelay: "200ms",
+            }}
+          >
             <p className="text-muted-foreground leading-relaxed text-lg">
               I'm a passionate video editor specializing in cinematic edits, reels,
               advertisements, and motion graphics. With expertise in industry-standard
@@ -68,10 +76,15 @@ const AboutSection = () => {
         </div>
 
         <div className="skill-icons-row flex flex-wrap justify-center gap-8">
-          {skills.map((s) => (
+          {skills.map((s, i) => (
             <div
               key={s.name}
-              className="skill-icon glass-card glow-border rounded-2xl p-4 flex flex-col items-center gap-3 w-28 transition-all duration-300 hover:scale-105"
+              className="skill-icon glass-card glow-border rounded-2xl p-4 flex flex-col items-center gap-3 w-28 transition-all duration-500 hover:scale-105"
+              style={{
+                opacity: inView ? 1 : 0,
+                transform: inView ? "translateY(0) scale(1)" : "translateY(30px) scale(0.8)",
+                transitionDelay: `${400 + i * 150}ms`,
+              }}
             >
               <img
                 src={s.icon}
