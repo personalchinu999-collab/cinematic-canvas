@@ -59,42 +59,11 @@ const AboutSection = () => {
     <section ref={sectionRef} id="about" className="section-padding relative">
       <div className="max-w-6xl mx-auto relative z-10">
 
-        {/* 🔥 Apple Liquid Glass Heading */}
         <h2 className="text-4xl md:text-5xl font-semibold text-center mb-16">
-          <span
-            className="relative inline-block px-8 py-3 rounded-2xl"
-            style={{
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))",
-              border: "1px solid rgba(255,255,255,0.2)",
-              boxShadow:
-                "0 8px 32px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(255,255,255,0.05)",
-            }}
-          >
-            <span
-              style={{
-                background: "linear-gradient(180deg, #ffffff, #a5b4fc)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              About Me
-            </span>
-
-            {/* shine effect */}
-            <span
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.4), transparent 60%)",
-                opacity: 0.4,
-                transform: "translateX(-100%)",
-                animation: "shine 4s infinite",
-              }}
-            />
-          </span>
-        </h2>
+  <span className="text-gradient">
+    About Me
+  </span>
+</h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
 
