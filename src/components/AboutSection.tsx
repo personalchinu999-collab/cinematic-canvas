@@ -5,14 +5,14 @@ import capcutLogo from "@/assets/capcut_logo.jpg";
 import aeLogo from "@/assets/after_effect_logo.jpg";
 import prLogo from "@/assets/premiere_pro_logo.png";
 import psLogo from "@/assets/photoshop_logo.jpg";
-import canvaLogo from "@/assets/canva_logo.jpg"; // ✅ FIXED
+import canvaLogo from "@/assets/canva_logo.jpg";
 
 const skills = [
   { name: "Premiere Pro", icon: prLogo },
   { name: "After Effects", icon: aeLogo },
   { name: "Photoshop", icon: psLogo },
   { name: "CapCut", icon: capcutLogo },
-  { name: "Canva", icon: canvaLogo }, // ✅ FIXED
+  { name: "Canva", icon: canvaLogo },
 ];
 
 const useInView = (threshold = 0.1) => {
@@ -22,7 +22,12 @@ const useInView = (threshold = 0.1) => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
       { threshold }
     );
     obs.observe(el);
@@ -35,7 +40,6 @@ const AboutSection = () => {
   const { ref: sectionRef, inView } = useInView(0.05);
   const skillsRef = useRef<HTMLDivElement>(null);
 
-  // GSAP floating animation for skill icons
   useEffect(() => {
     if (!inView || !skillsRef.current) return;
     const icons = skillsRef.current.querySelectorAll(".skill-icon-img");
@@ -54,12 +58,46 @@ const AboutSection = () => {
   return (
     <section ref={sectionRef} id="about" className="section-padding relative">
       <div className="max-w-6xl mx-auto relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-          About <span className="text-gradient">Me</span>
+
+        {/* 🔥 Apple Liquid Glass Heading */}
+        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-16">
+          <span
+            className="relative inline-block px-8 py-3 rounded-2xl"
+            style={{
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))",
+              border: "1px solid rgba(255,255,255,0.2)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(255,255,255,0.05)",
+            }}
+          >
+            <span
+              style={{
+                background: "linear-gradient(180deg, #ffffff, #a5b4fc)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              About Me
+            </span>
+
+            {/* shine effect */}
+            <span
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.4), transparent 60%)",
+                opacity: 0.4,
+                transform: "translateX(-100%)",
+                animation: "shine 4s infinite",
+              }}
+            />
+          </span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-          {/* Profile image - larger, circular, soft glow */}
+
           <div
             className="about-img flex justify-center transition-all duration-[800ms] ease-out"
             style={{
@@ -69,10 +107,11 @@ const AboutSection = () => {
           >
             <div className="relative group cursor-pointer">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-secondary/40 blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-              <div className="relative w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-2"
+              <div
+                className="relative w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-2"
                 style={{
-                  boxShadow: "0 0 40px hsla(220, 80%, 60%, 0.2), 0 0 80px hsla(260, 60%, 55%, 0.1)",
-                  border: "none",
+                  boxShadow:
+                    "0 0 40px hsla(220, 80%, 60%, 0.2), 0 0 80px hsla(260, 60%, 55%, 0.1)",
                 }}
               >
                 <img
@@ -80,11 +119,12 @@ const AboutSection = () => {
                   alt="Rishabh Saraswat"
                   className="w-full h-full object-cover object-top"
                 />
-                {/* Soft edge blend */}
-                <div className="absolute inset-0 rounded-full" style={{
-                  boxShadow: "inset 0 0 40px 20px hsl(220 20% 4%)",
-                  pointerEvents: "none",
-                }} />
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    boxShadow: "inset 0 0 40px 20px hsl(220 20% 4%)",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -101,33 +141,31 @@ const AboutSection = () => {
               I'm a passionate video editor specializing in cinematic edits, reels,
               advertisements, and motion graphics. With expertise in industry-standard
               tools, I bring creative visions to life through compelling visual
-              storytelling. Every frame is crafted to captivate and communicate your
-              brand's unique story.
+              storytelling.
             </p>
           </div>
         </div>
 
-        {/* Skill icons with GSAP float + hover glow */}
         <div ref={skillsRef} className="skill-icons-row flex flex-wrap justify-center gap-8">
           {skills.map((s, i) => (
             <div
               key={s.name}
-              className="skill-icon glass-card rounded-2xl p-5 flex flex-col items-center gap-3 w-32 transition-all duration-500 cursor-pointer group"
+              className="skill-icon rounded-2xl p-5 flex flex-col items-center gap-3 w-32 transition-all duration-500 cursor-pointer group"
               style={{
+                backdropFilter: "blur(16px)",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.15)",
                 opacity: inView ? 1 : 0,
                 transform: inView ? "translateY(0) scale(1)" : "translateY(30px) scale(0.8)",
                 transitionDelay: `${400 + i * 150}ms`,
-                border: "1px solid hsla(220, 80%, 60%, 0.2)",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget;
-                el.style.borderColor = "hsla(220, 80%, 60%, 0.6)";
-                el.style.boxShadow = "0 0 30px hsla(220, 80%, 60%, 0.3), 0 0 60px hsla(260, 60%, 55%, 0.15)";
+                el.style.boxShadow = "0 0 30px rgba(255,255,255,0.25)";
                 el.style.transform = "scale(1.12)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget;
-                el.style.borderColor = "hsla(220, 80%, 60%, 0.2)";
                 el.style.boxShadow = "none";
                 el.style.transform = "scale(1)";
               }}
@@ -137,13 +175,25 @@ const AboutSection = () => {
                 alt={s.name}
                 className="skill-icon-img w-14 h-14 rounded-xl object-cover"
               />
-              <span className="text-xs text-muted-foreground font-medium text-center group-hover:text-foreground transition-colors">
+              <span className="text-xs text-muted-foreground font-medium text-center group-hover:text-white transition-colors">
                 {s.name}
               </span>
             </div>
           ))}
         </div>
+
       </div>
+
+      {/* Shine Animation */}
+      <style>
+        {`
+          @keyframes shine {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}
+      </style>
     </section>
   );
 };
