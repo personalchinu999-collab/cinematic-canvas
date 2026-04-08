@@ -5,14 +5,14 @@ import capcutLogo from "@/assets/capcut_logo.jpg";
 import aeLogo from "@/assets/after_effect_logo.jpg";
 import prLogo from "@/assets/premiere_pro_logo.png";
 import psLogo from "@/assets/photoshop_logo.jpg";
-import psLogo from "@/assets/canva_logo.jpg";
+import canvaLogo from "@/assets/canva_logo.jpg"; // ✅ FIXED
 
 const skills = [
   { name: "Premiere Pro", icon: prLogo },
   { name: "After Effects", icon: aeLogo },
   { name: "Photoshop", icon: psLogo },
   { name: "CapCut", icon: capcutLogo },
-  { name: "Canva", icon: canvaLogo },
+  { name: "Canva", icon: canvaLogo }, // ✅ FIXED
 ];
 
 const useInView = (threshold = 0.1) => {
