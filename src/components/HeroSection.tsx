@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useMouseParallax } from "@/hooks/useMouseParallax";
-import motionbg from "@/assets/motionbg.mp4";
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -23,21 +22,8 @@ const HeroSection = () => {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center section-padding overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center section-padding"
     >
-      {/* 🎥 Background Video */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        src={motionbg}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-
-      {/* Overlay (for readability) */}
-      <div className="absolute inset-0 bg-black/50 z-0" />
-
       {/* Floating lights with parallax */}
       <div
         className="floating-light w-[500px] h-[500px] bg-primary/20 -top-40 left-1/4 animate-float"
